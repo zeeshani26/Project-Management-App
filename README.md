@@ -1,5 +1,7 @@
 # Project-Management-App
 
+LIVE URL : https://main.d34ytcvkirv088.amplifyapp.com/
+
 The Project Management Dashboard aims to create a scalable, cloud-based application using Next.js, Node.js, Express, and PostgreSQL, deployed on AWS. The primary objective is to enhance cloud computing skills while gaining hands-on experience with AWS deployment and security.
 
 The project will feature a secure authentication system, task management capabilities, and collaboration tools, allowing users to create, assign, and track tasks. A dashboard with analytics will provide insights into project progress and task statuses. AWS services will be utilized for hosting, scalability, and security.
