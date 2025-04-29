@@ -19,3 +19,62 @@ body,
   @apply dark:bg-black;
 
                 }
+
+/* TIMELINE STYLING */
+
+.timeline .roundedCell {
+  @apply rounded-tl-md border border-r-0 border-[#e6e4e4] dark:border-stroke-dark;
+}
+
+.timeline .borderCell {
+  @apply border-[#e6e4e4] dark:border-stroke-dark;
+}
+
+.timeline .fillPrimary {
+  @apply fill-white dark:fill-dark-secondary;
+}
+
+.timeline .fillPrimary:nth-child(even) {
+  @apply fill-[#f5f5f5] dark:fill-dark-tertiary;
+}
+
+.timeline .fillSecondary {
+  @apply fill-white stroke-[#e6e4e4] dark:fill-dark-secondary dark:stroke-stroke-dark;
+}
+
+.timeline .fillIcon {
+  @apply fill-[#333] dark:fill-white;
+}
+
+.timeline .backgroundPrimary {
+  @apply bg-white dark:bg-dark-secondary;
+}
+
+.timeline .backgroundPrimary:nth-of-type(even) {
+  @apply bg-[#f5f5f5] dark:bg-dark-tertiary;
+}
+
+.timeline .strokeLines,
+.timeline .strokeIcons,
+.timeline .strokeShapes {
+  @apply stroke-[#e6e4e4] dark:stroke-stroke-dark;
+}
+
+.timeline .noLeftBorder {
+  @apply border-l-0 border-[#e6e4e4] dark:border-stroke-dark;
+}
+
+.timeline .backgroundMain {
+  @apply bg-white dark:bg-dark-bg;
+}
+
+.timeline .textMuted {
+  @apply dark:text-neutral-500;
+}
+
+/* Hide Scrollbar */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
