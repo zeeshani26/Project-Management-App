@@ -1,5 +1,5 @@
 import Modal from "@/components/Modal";
-import { useCreateProjectsMutation } from "@/state/api";
+import { useCreateProjectMutation } from "@/state/api";
 import React, { useState } from "react";
 import { formatISO } from "date-fns";  // to format date to ISO string
 
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const ModalNewProject = ({ isOpen, onClose }: Props) => {
-  const [createProject, { isLoading }] = useCreateProjectsMutation();
+  const [createProject, { isLoading }] = useCreateProjectMutation();
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");

@@ -9,19 +9,19 @@ export interface Project {
   endDate?: string;
 }
 
-export enum Status {
-  ToDo = "To Do",
-  WorkInProgress = "Work In Progress",
-  UnderReview = "Under Review",
-  Completed = "Completed",
-}
-
 export enum Priority {
   Urgent = "Urgent",
   High = "High",
   Medium = "Medium",
   Low = "Low",
   Backlog = "Backlog",
+}
+
+export enum Status {
+  ToDo = "To Do",
+  WorkInProgress = "Work In Progress",
+  UnderReview = "Under Review",
+  Completed = "Completed",
 }
 
 export interface User {
@@ -31,13 +31,6 @@ export interface User {
   profilePictureUrl?: string;
   cognitoId?: string;
   teamId?: number;
-}
-
-export interface Team {
-  teamId: number;
-  teamName: string;
-  productOwnerUserId?: number;
-  projectManagerUserId?: number;
 }
 
 export interface Attachment {
@@ -72,6 +65,13 @@ export interface SearchResults {
   tasks?: Task[];
   projects?: Project[];
   users?: User[];
+}
+
+export interface Team {
+  teamId: number;
+  teamName: string;
+  productOwnerUserId?: number;
+  projectManagerUserId?: number;
 }
 
 export const api = createApi({
@@ -111,7 +111,7 @@ export const api = createApi({
       query: () => "projects",
       providesTags: ["Projects"],
     }),
-    createProjects: build.mutation<Project, Partial<Project>>({
+    createProject: build.mutation<Project, Partial<Project>>({
       query: (project) => ({
         url: "projects",
         method: "POST",
@@ -121,9 +121,10 @@ export const api = createApi({
     }),
     getTasks: build.query<Task[], { projectId: number }>({
       query: ({ projectId }) => `tasks?projectId=${projectId}`,
-      providesTags: (result, error, { projectId }) => [
-        { type: "Tasks", id: `LIST-${projectId}` },
-      ],
+      providesTags: (result) =>
+        result
+          ? result.map(({ id }) => ({ type: "Tasks" as const, id }))
+          : [{ type: "Tasks" as const }],
     }),
     getTasksByUser: build.query<Task[], number>({
       query: (userId) => `tasks/user/${userId}`,
@@ -138,10 +139,7 @@ export const api = createApi({
         method: "POST",
         body: task,
       }),
-      invalidatesTags: (result, error, task) =>
-        task?.projectId
-          ? [{ type: "Tasks", id: `LIST-${task.projectId}` }]
-          : [{ type: "Tasks" }],
+      invalidatesTags: ["Tasks"],
     }),
     updateTaskStatus: build.mutation<Task, { taskId: number; status: string }>({
       query: ({ taskId, status }) => ({
@@ -169,13 +167,13 @@ export const api = createApi({
 
 export const {
   useGetProjectsQuery,
-  useCreateProjectsMutation,
+  useCreateProjectMutation,
   useGetTasksQuery,
   useCreateTaskMutation,
-  useGetTasksByUserQuery,
   useUpdateTaskStatusMutation,
   useSearchQuery,
   useGetUsersQuery,
   useGetTeamsQuery,
+  useGetTasksByUserQuery,
   useGetAuthUserQuery,
 } = api;
