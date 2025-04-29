@@ -75,17 +75,17 @@ export interface SearchResults {
 }
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     prepareHeaders: async (headers) => {
       const session = await fetchAuthSession();
       const { accessToken } = session.tokens ?? {};
-      if(accessToken) {
+      if (accessToken) {
         headers.set("Authorization", `Bearer ${accessToken}`);
       }
       return headers;
-    } 
-
-   }),
+    },
+  }),
   reducerPath: "api",
   tagTypes: ["Projects", "Tasks", "Users", "Teams"],
   endpoints: (build) => ({
@@ -121,10 +121,9 @@ export const api = createApi({
     }),
     getTasks: build.query<Task[], { projectId: number }>({
       query: ({ projectId }) => `tasks?projectId=${projectId}`,
-      providesTags: (result) =>
-        result
-          ? result.map(({ id }) => ({ type: "Tasks" as const, id }))
-          : [{ type: "Tasks" as const }],
+      providesTags: (result, error, { projectId }) => [
+        { type: "Tasks", id: `LIST-${projectId}` },
+      ],
     }),
     getTasksByUser: build.query<Task[], number>({
       query: (userId) => `tasks/user/${userId}`,
@@ -139,7 +138,10 @@ export const api = createApi({
         method: "POST",
         body: task,
       }),
-      invalidatesTags: ["Tasks"],
+      invalidatesTags: (result, error, task) =>
+        task?.projectId
+          ? [{ type: "Tasks", id: `LIST-${task.projectId}` }]
+          : [{ type: "Tasks" }],
     }),
     updateTaskStatus: build.mutation<Task, { taskId: number; status: string }>({
       query: ({ taskId, status }) => ({
@@ -175,5 +177,5 @@ export const {
   useSearchQuery,
   useGetUsersQuery,
   useGetTeamsQuery,
-  useGetAuthUserQuery
+  useGetAuthUserQuery,
 } = api;
