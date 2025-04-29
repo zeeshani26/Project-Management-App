@@ -25,44 +25,20 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const createTask = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const {
-    title,
-    description,
-    status,
-    priority,
-    tags,
-    startDate,
-    dueDate,
-    points,
-    projectId,
-    authorUserId,
-    assignedUserId,
-  } = req.body;
+export const createTask = async (req: Request, res: Response): Promise<void> => {
+  // Destructure and remove id if present
+  const { id, ...taskData } = req.body;
+  
   try {
     const newTask = await prisma.task.create({
-      data: {
-        title,
-        description,
-        status,
-        priority,
-        tags,
-        startDate,
-        dueDate,
-        points,
-        projectId,
-        authorUserId,
-        assignedUserId,
-      },
+      data: taskData // Only pass fields without id
     });
     res.status(201).json(newTask);
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: `Error creating a task: ${error.message}` });
+    res.status(500).json({ 
+      message: `Error creating task: ${error.message}`,
+      meta: error.meta // Helps debug which field caused issues
+    });
   }
 };
 
