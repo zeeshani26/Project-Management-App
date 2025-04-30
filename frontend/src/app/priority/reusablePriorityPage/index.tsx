@@ -78,7 +78,8 @@ const ReusablePriorityPage = ({ priority }: Props) => {
   const [isModalNewTaskOpen, setIsModalNewTaskOpen] = useState(false);
 
   const { data: currentUser } = useGetAuthUserQuery({});
-  const userId = currentUser?.userDetails?.userId ?? null;
+  console.log("Current User:", currentUser);
+  const userId = currentUser?.userDetails?.userId ?? 1;
   const {
     data: tasks,
     isLoading,
@@ -105,7 +106,7 @@ const ReusablePriorityPage = ({ priority }: Props) => {
         name="Priority Page"
         buttonComponent={
           <button
-            className="mr-3 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            className="mr-3 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
             onClick={() => setIsModalNewTaskOpen(true)}
           >
             Add Task
